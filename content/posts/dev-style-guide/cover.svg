@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Neural network placeholder</title>
+  <desc id="desc">An abstract network of connected nodes on a dark blue gradient.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#93c5fd" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#60a5fa" stop-opacity=".1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="930" cy="120" r="230" fill="url(#glow)"/>
+  <g stroke="#bfdbfe" stroke-opacity=".6" stroke-width="4">
+    <path d="M190 430 390 230 590 390 790 190 1010 360"/>
+    <path d="M190 430 410 510 590 390 810 510 1010 360"/>
+    <path d="M390 230 410 510M790 190 810 510"/>
+  </g>
+  <g fill="#eff6ff">
+    <circle cx="190" cy="430" r="18"/><circle cx="390" cy="230" r="18"/>
+    <circle cx="410" cy="510" r="18"/><circle cx="590" cy="390" r="24"/>
+    <circle cx="790" cy="190" r="18"/><circle cx="810" cy="510" r="18"/>
+    <circle cx="1010" cy="360" r="22"/>
+  </g>
+  <text x="76" y="110" fill="#eff6ff" font-family="system-ui, sans-serif" font-size="54" font-weight="700">Technical Article Preview</text>
+  <text x="78" y="158" fill="#bfdbfe" font-family="system-ui, sans-serif" font-size="26">Typography · Math · Code · TOC</text>
+</svg>

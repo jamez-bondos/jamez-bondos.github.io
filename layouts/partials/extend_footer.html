@@ -1,0 +1,62 @@
+{{- if and (eq .Kind "page") (.Param "ShowToc") }}
+<script>
+(() => {
+  const toc = document.querySelector(".post-single > details.toc");
+  if (!toc) return;
+
+  const links = [...toc.querySelectorAll('a[href^="#"]')];
+  const targets = links
+    .map((link) => {
+      try {
+        const id = decodeURIComponent(link.hash.slice(1));
+        return { link, heading: document.getElementById(id) };
+      } catch {
+        return null;
+      }
+    })
+    .filter((target) => target?.heading);
+
+  if (!targets.length) return;
+
+  const activate = (id) => {
+    for (const { link, heading } of targets) {
+      const isActive = heading.id === id;
+      link.classList.toggle("toc-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    }
+  };
+
+  const updateActiveLink = () => {
+    const marker = window.innerHeight * 0.22;
+    let current = targets[0].heading.id;
+
+    for (const { heading } of targets) {
+      if (heading.getBoundingClientRect().top > marker) break;
+      current = heading.id;
+    }
+
+    activate(current);
+  };
+
+  let updateQueued = false;
+  window.addEventListener("scroll", () => {
+    if (updateQueued) return;
+    updateQueued = true;
+    window.requestAnimationFrame(() => {
+      updateActiveLink();
+      updateQueued = false;
+    });
+  }, { passive: true });
+
+  for (const { link, heading } of targets) {
+    link.addEventListener("click", () => activate(heading.id));
+  }
+
+  updateActiveLink();
+})();
+</script>
+{{- end }}

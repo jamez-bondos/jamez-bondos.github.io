@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Inference pipeline placeholder</title>
+  <desc id="desc">A sequence of connected processing stages on a violet background.</desc>
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#312e81"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg2)"/>
+  <g fill="none" stroke="#ddd6fe" stroke-width="8">
+    <rect x="150" y="270" width="210" height="130" rx="24"/>
+    <rect x="495" y="270" width="210" height="130" rx="24"/>
+    <rect x="840" y="270" width="210" height="130" rx="24"/>
+    <path d="M360 335h115m230 0h115"/>
+    <path d="m450 305 30 30-30 30m345-60 30 30-30 30"/>
+  </g>
+  <g fill="#f5f3ff" font-family="system-ui, sans-serif" text-anchor="middle">
+    <text x="255" y="350" font-size="34">Input</text>
+    <text x="600" y="350" font-size="34">Decode</text>
+    <text x="945" y="350" font-size="34">Output</text>
+  </g>
+  <text x="72" y="105" fill="#f5f3ff" font-family="system-ui, sans-serif" font-size="54" font-weight="700">Inference Systems</text>
+  <text x="74" y="154" fill="#ddd6fe" font-family="system-ui, sans-serif" font-size="26">Latency · Throughput · Scheduling</text>
+</svg>

@@ -1,0 +1,4 @@
+{{- $noop := .WordCount }}
+{{- if .Page.Store.Get "hasMath" }}
+  {{- partial "math.html" . }}
+{{- end }}

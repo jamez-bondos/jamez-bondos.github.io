@@ -1,0 +1,79 @@
+baseURL: "https://jamez-bondos.github.io/"
+locale: "zh-cn"
+defaultContentLanguage: "zh"
+title: "Jamez’s Blog"
+theme: "PaperMod"
+enableRobotsTXT: true
+hasCJKLanguage: true
+
+params:
+  env: development
+  author: "Jamez"
+  description: "关于大语言模型、推理系统与 AI 产品的思考和实践"
+  defaultTheme: auto
+  ShowReadingTime: false
+  ShowWordCount: false
+  ShowToc: true
+  TocOpen: true
+  ShowCodeCopyButtons: true
+  ShowPostNavLinks: false
+  ShowBreadCrumbs: false
+  UseHugoToc: true
+  mainSections:
+    - posts
+  profileMode:
+    enabled: false
+  homeInfoParams:
+    Title: "Jamez’s Blog"
+    Content: "关于大语言模型、推理系统与 AI 产品的思考和实践"
+  socialIcons:
+    - name: github
+      url: "https://github.com/jamez-bondos"
+    - name: x
+      url: "https://x.com/AIJamezBondos"
+    - name: rss
+      url: "/index.xml"
+
+menu:
+  main:
+    - identifier: posts
+      name: "文章"
+      url: "/posts/"
+      weight: 10
+    - identifier: tags
+      name: "主题"
+      url: "/tags/"
+      weight: 20
+    - identifier: search
+      name: "搜索"
+      url: "/search/"
+      weight: 30
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+taxonomies:
+  tag: tags
+
+markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
+    ordered: false
+  goldmark:
+    extensions:
+      passthrough:
+        delimiters:
+          block:
+            - ["\\[", "\\]"]
+            - ["$$", "$$"]
+          inline:
+            - ["\\(", "\\)"]
+        enable: true
+  highlight:
+    noClasses: false
+    guessSyntax: true
+    lineNos: false
