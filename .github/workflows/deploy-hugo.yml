@@ -216,12 +216,12 @@ jobs:
             exit 1
           fi
 
-          if rg --fixed-strings --line-number "http://${SITE_HOST}" "public"; then
+          if grep -RIFn -- "http://${SITE_HOST}" "public"; then
             echo "::error::Pages artifact contains insecure URLs for ${SITE_HOST}"
             exit 1
           fi
 
-          if ! rg --fixed-strings --quiet "${SITE_BASE_URL}" "public"; then
+          if ! grep -RIFq -- "${SITE_BASE_URL}" "public"; then
             echo "::error::Pages artifact does not reference the resolved HTTPS base URL"
             exit 1
           fi
