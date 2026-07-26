@@ -33,7 +33,11 @@ theme submodule remains pinned until an upstream-compatible version is selected.
 The public repository owns site structure content:
 
 - `content/search.md`
+- `content/tags/_index.md` — sets the taxonomy page title
 - `content/posts/_index.md`
+
+Article covers are authored at a **3:2** ratio. The list card pins its cover to
+that ratio, so a source image with a different ratio is centre-cropped to fit.
 
 The private content repository may only add articles in Page Bundle form:
 

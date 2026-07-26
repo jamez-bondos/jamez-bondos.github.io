@@ -2,5 +2,8 @@
 /resources/_gen/
 /_content/
 /_build-content/
+/_preview-content/
 .hugo_build.lock
 .DS_Store
+/.agents/
+/.playwright-cli/

@@ -24,8 +24,8 @@ params:
   profileMode:
     enabled: false
   homeInfoParams:
-    Title: "Jamez’s Blog"
-    Content: "关于大语言模型、推理系统与 AI 产品的思考和实践"
+    Title: "Jamez 的学习笔记"
+    Content: "关于编程、大语言模型和 Agent"
   socialIcons:
     - name: github
       url: "https://github.com/jamez-bondos"
@@ -41,7 +41,7 @@ menu:
       url: "/posts/"
       weight: 10
     - identifier: tags
-      name: "主题"
+      name: "标签"
       url: "/tags/"
       weight: 20
     - identifier: search
