@@ -4,6 +4,7 @@
   const toc = document.querySelector(".post-single > details.toc");
   if (!toc) return;
 
+  const summary = toc.querySelector("summary");
   const links = [...toc.querySelectorAll('a[href^="#"]')];
   const targets = links
     .map((link) => {
@@ -18,16 +19,65 @@
 
   if (!targets.length) return;
 
+  /* Only the wide-viewport sidebar scrolls on its own. Below that breakpoint
+     the list sits in normal flow, where moving a link into view would drag the
+     page with it. Reading the computed position keeps this in step with the
+     stylesheet instead of repeating the breakpoint here. */
+  const isDocked = () => getComputedStyle(toc).position === "fixed";
+
+  const syncScrollHints = () => {
+    const scrollable =
+      isDocked() && toc.open && toc.scrollHeight > toc.clientHeight + 1;
+    toc.classList.toggle("toc-scrollable", scrollable);
+    toc.classList.toggle(
+      "toc-at-end",
+      scrollable && toc.scrollTop + toc.clientHeight >= toc.scrollHeight - 1
+    );
+  };
+
+  /* Nudge toc.scrollTop rather than calling scrollIntoView, which would also
+     scroll every scrollable ancestor including the document. */
+  const reveal = (link) => {
+    if (!isDocked() || !toc.open) return;
+
+    const linkBox = link.getBoundingClientRect();
+    const tocBox = toc.getBoundingClientRect();
+    const gap = 8;
+
+    /* The sticky summary covers the top of the scrollport and the fade covers
+       the bottom, so treat both as occupied. Without the fade allowance the
+       active row parks under its own gradient when reading downwards. */
+    const ceiling =
+      tocBox.top + (summary ? summary.getBoundingClientRect().height : 0);
+    const fade =
+      parseFloat(getComputedStyle(toc).getPropertyValue("--toc-fade")) || 0;
+    const floor = tocBox.bottom - fade;
+
+    if (linkBox.top < ceiling) {
+      toc.scrollTop -= ceiling - linkBox.top + gap;
+    } else if (linkBox.bottom > floor) {
+      toc.scrollTop += linkBox.bottom - floor + gap;
+    }
+  };
+
+  let activeId = null;
+
   const activate = (id) => {
     for (const { link, heading } of targets) {
       const isActive = heading.id === id;
       link.classList.toggle("toc-active", isActive);
       if (isActive) {
         link.setAttribute("aria-current", "location");
+        /* Only on change, so a reader scrolling the list by hand is not
+           dragged back on every frame. */
+        if (id !== activeId) reveal(link);
       } else {
         link.removeAttribute("aria-current");
       }
     }
+
+    activeId = id;
+    syncScrollHints();
   };
 
   const updateActiveLink = () => {
@@ -56,7 +106,12 @@
     link.addEventListener("click", () => activate(heading.id));
   }
 
+  toc.addEventListener("scroll", syncScrollHints, { passive: true });
+  toc.addEventListener("toggle", syncScrollHints);
+  window.addEventListener("resize", syncScrollHints, { passive: true });
+
   updateActiveLink();
+  syncScrollHints();
 })();
 </script>
 {{- end }}

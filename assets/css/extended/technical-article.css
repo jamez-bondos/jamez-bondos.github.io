@@ -101,6 +101,9 @@
 
 @media screen and (min-width: 1280px) {
   .post-single > details.toc {
+    /* Height of the bottom fade. The script reads this so it can park the
+       active row clear of it; keep the value in px so parseFloat works. */
+    --toc-fade: 40px;
     position: fixed;
     top: calc(var(--header-height) + var(--gap));
     left: calc(50% + 360px + var(--gap));
@@ -132,7 +135,23 @@
 
   .post-single > details.toc .inner {
     margin: 0;
-    padding: 0.7rem 1rem 0.9rem;
+    padding: 0.7rem 1rem 1.5rem;
+  }
+
+  /* Fade the last visible row so a clipped list reads as scrollable rather
+     than broken. The script adds these classes only while the list actually
+     overflows and is not already scrolled to the end. */
+  .post-single > details.toc.toc-scrollable:not(.toc-at-end) {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - var(--toc-fade)),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - var(--toc-fade)),
+      transparent
+    );
   }
 
   .post-single > details.toc .inner > ul,
