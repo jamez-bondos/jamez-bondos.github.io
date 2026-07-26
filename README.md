@@ -64,13 +64,19 @@ section files into the build.
 
 ## GitHub Pages deployment
 
-The production site is `https://jamez-bondos.github.io/`. GitHub Pages must use
-**GitHub Actions** as its source; no `gh-pages` branch is used.
+The production site is `https://jamez.dev/`. GitHub Pages owns this custom
+domain and redirects the default `https://jamez-bondos.github.io/` address to
+it. GitHub Pages must use **GitHub Actions** as its source; no `gh-pages` branch
+is used.
 
 `.github/workflows/deploy-hugo.yml` builds with Hugo `0.164.0`, checks out the
 private content repository, merges only its post bundles, and deploys the
-generated Pages artifact. A content push sends a `repository_dispatch` event
-containing the exact content commit SHA.
+generated Pages artifact. The workflow reads the current site URL from GitHub
+Pages, normalizes its protocol to HTTPS while preserving its host and path, and
+passes that URL to Hugo as the production `baseURL`. The `baseURL` in
+`hugo.yaml` remains the default Pages address for local and fallback builds. A
+content push sends a `repository_dispatch` event containing the exact content
+commit SHA.
 
 The public site repository requires this Actions secret:
 

@@ -18,6 +18,7 @@ on:
       - "hugo.yml"
       - "hugo.toml"
       - "config/**"
+      - ".github/scripts/**"
       - ".github/workflows/deploy-hugo.yml"
   repository_dispatch:
     types:
@@ -41,6 +42,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      site_base_url: ${{ steps.site-url.outputs.base_url }}
     steps:
       - name: Checkout site repository
         uses: actions/checkout@v7
@@ -155,6 +158,17 @@ jobs:
         id: pages
         uses: actions/configure-pages@v6
 
+      - name: Test Pages base URL normalization
+        shell: bash
+        run: bash .github/scripts/test-normalize-pages-base-url.sh
+
+      - name: Resolve production base URL
+        id: site-url
+        shell: bash
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: bash .github/scripts/normalize-pages-base-url.sh "${PAGES_BASE_URL}" >> "${GITHUB_OUTPUT}"
+
       - name: Install Hugo
         shell: bash
         run: |
@@ -174,13 +188,16 @@ jobs:
           set -euo pipefail
           hugo \
             --contentDir "_build-content" \
-            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --baseURL "${{ steps.site-url.outputs.base_url }}" \
             --cacheDir "${RUNNER_TEMP}/hugo_cache" \
             --gc \
             --minify
 
       - name: Validate Pages artifact
         shell: bash
+        env:
+          SITE_BASE_URL: ${{ steps.site-url.outputs.base_url }}
+          SITE_HOST: ${{ steps.site-url.outputs.host }}
         run: |
           set -euo pipefail
 
@@ -199,6 +216,16 @@ jobs:
             exit 1
           fi
 
+          if rg --fixed-strings --line-number "http://${SITE_HOST}" "public"; then
+            echo "::error::Pages artifact contains insecure URLs for ${SITE_HOST}"
+            exit 1
+          fi
+
+          if ! rg --fixed-strings --quiet "${SITE_BASE_URL}" "public"; then
+            echo "::error::Pages artifact does not reference the resolved HTTPS base URL"
+            exit 1
+          fi
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
@@ -209,7 +236,7 @@ jobs:
     needs: build
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ needs.build.outputs.site_base_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
